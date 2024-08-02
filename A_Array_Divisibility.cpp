@@ -92,3 +92,23 @@
 // The array a=[10,6,15,32,125,54]
 //  satisfies all of the above conditions. Hence, a
 //  is a valid array.
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int tt; 
+    cin >> tt;
+
+    while(tt--){
+        int n; cin >> n;
+        for(int i=1; i<=n; i++){
+            cout << i <<" \n"[i==n];
+        }
+    }
+}
+// TC is O(n) 
+// where n is the largest size of n =>2e5 to 5e5
