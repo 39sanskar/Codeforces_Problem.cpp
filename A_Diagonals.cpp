@@ -56,4 +56,3 @@
 // In the first test case, there are no chips, so 0 diagonals will be occupied. In the second test case, both chips can be placed on diagonal (2,1),(1,2)
 // , so the answer is 1. In the third test case, 3 chips can't be placed on one diagonal, but placing them on (1,2),(2,1),(1,1)
 //  makes 2 diagonals occupied. In the 7th test case, chips will occupy all 5 diagonals in any valid placing.
-
