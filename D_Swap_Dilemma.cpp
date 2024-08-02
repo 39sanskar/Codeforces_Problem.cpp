@@ -102,6 +102,136 @@
 // , p=3
 // , q=4
 // .
-
+#include<bits/stdc++.h>
+using namespace std;
+ 
+#define int long long
+ 
+struct segmenttree {
+    int n;
+    vector<int> st;
+ 
+    void init(int _n) {
+        this->n = _n;
+        st.resize(4 * n, 0);
+    }
+ 
+    int comb(int a, int b)
+    {
+        return a + b;
+    }
+ 
+    void build(int start, int ending, int node, vector<int> &v) {
+        if (start == ending) {
+            st[node] = v[start]; return;
+        }
+ 
+        int mid = (start + ending) / 2;
+ 
+        build(start, mid, 2 * node + 1, v);
+ 
+        build(mid + 1, ending, 2 * node + 2, v);
+ 
+        st[node] = comb(st[node * 2 + 1], st[node * 2 + 2]);
+    }
+ 
+    int query(int start, int ending, int l, int r, int node) {
+        if (start > r || ending < l) {
+            return 0;
+        }
+ 
+        if (start >= l && ending <= r) {
+            return st[node];
+        }
+ 
+        int mid = (start + ending) / 2;
+ 
+        int q1 = query(start, mid, l, r, 2 * node + 1);
+        int q2 = query(mid + 1, ending, l, r, 2 * node + 2);
+ 
+        return comb(q1, q2);
+    }
+ 
+    void update(int start, int ending, int node, int index, int value) {
+        if (start == ending) {
+            st[node] = value;
+            return;
+        }
+ 
+        int mid = (start + ending) / 2;
+        if (index <= mid) {
+            update(start, mid, 2 * node + 1, index, value);
+        }
+        else {
+            update(mid + 1, ending, 2 * node + 2, index, value);
+        }
+ 
+        st[node] = comb(st[node * 2 + 1], st[node * 2 + 2]);
+ 
+        return;
+    }
+ 
+    void build(vector<int> &v) {
+        build(0, n - 1, 0, v);
+    }
+ 
+    int query(int l, int r) {
+        return query(0, n - 1, l, r, 0);
+    }
+ 
+    void update(int x, int y) {
+        update(0, n - 1, 0, x, y);
+    }
+};
+ 
+signed main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+ 
+    int tt; cin >> tt;
+ 
+    while(tt--) {
+        int n; cin >> n;
+ 
+        vector<int>a(n), b(n);
+ 
+        for(auto &i : a) cin >> i;
+        for(auto &i : b) cin >> i;
+ 
+        auto equal = [&](vector<int>a, vector<int>b) {
+            sort(a.begin(), a.end());
+            sort(b.begin(), b.end());
+            return a == b;
+        };
+ 
+        auto compress = [&](vector<int>&arr) {
+            vector<int>srt = arr;
+            sort(srt.begin(), srt.end());
+            for(auto &i : arr) i = lower_bound(srt.begin(), srt.end(), i) - srt.begin();
+        };
+ 
+        auto inversions = [&](vector<int>&arr) {
+            segmenttree tree; tree.init(n + 1);
+            long long inv = 0;
+ 
+            for(auto &i : arr) {
+                inv += tree.query(i + 1, n);
+                tree.update(i, 1);
+            }
+ 
+            return inv;
+        };
+ 
+        if(!equal(a, b)) {
+            cout << "NO\n";
+            continue;
+        }
+ 
+        compress(a); compress(b);
+ 
+        cout << (inversions(a) % 2 == inversions(b) % 2 ? "YES\n" : "NO\n");
+    }
+}
 
 
